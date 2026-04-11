@@ -1,0 +1,148 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* đoạn css cho các bài viết */
+.post__main p {
+  padding-bottom: 12px;
+  line-height: 1.4;
+}
+.post__main h1,
+.post__main h2,
+.post__main h3,
+.post__main h4 {
+  font-weight: bold;
+  padding-bottom: 16px;
+  padding-top: 8px;
+}
+.post__main h1 {
+  font-size: 1.6rem;
+}
+.post__main h2 {
+  font-size: 1.5rem;
+}
+.post__main h3 {
+  font-size: 1.4rem;
+}
+.post__main h4 {
+  font-size: 1.3rem;
+}
+.post__main p {
+  font-size: 18px;
+}
+.post__main span {
+  font-size: 18px;
+}
+
+.post__main b {
+  font-size: 18px;
+}
+
+.wp-caption-text {
+  padding-top: 8px;
+}
+
+.post__main li {
+  font-size: 18px;
+  padding-bottom: 8px;
+  margin-left: 14px;
+  list-style: disc;
+}
+
+.post__main li ul li {
+  font-size: 18px;
+  padding-bottom: 8px;
+  margin-left: 14px;
+  list-style: circle;
+}
+.post__main a {
+  color: blueviolet;
+  text-decoration: underline;
+}
+
+.post__main ol li {
+  list-style: decimal;
+  list-style-position: inside;
+  counter-reset: none !important; /* quan trọng */
+}
+
+.post__main ol {
+  list-style: decimal;
+  counter-reset: none !important; /* quan trọng */
+}
+.post__main ul {
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+.post__main img {
+  display: block;
+  margin: 0 auto;
+  padding-top: 12px;
+  padding-bottom: 10px;
+}
+.post__main figcaption {
+  text-align: center;
+  font-weight: 500;
+  padding-bottom: 8px;
+}
+.post__main table,
+.post__main th,
+.post__main td {
+  border: 1px solid black;
+}
+.post__main table {
+  margin-bottom: 12px;
+}
+
+.post__main th,
+.post__main td {
+  padding: 6px;
+}
+
+.post__heading {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.post__heading h1 {
+  font-size: 1.7rem;
+  font-weight: bold;
+  text-align: "center";
+  padding-bottom: "16px";
+}
+
+.not-found {
+  padding-top: 62px;
+}
+
+.not-found p {
+  font-weight: 600;
+  padding-bottom: 24px;
+  font-size: 1.2rem;
+}
+
+.not-found a {
+  color: red;
+  display: block;
+}
+
+@media (min-width: 1280px) {
+  .post {
+    flex-direction: row;
+  }
+  .post--share {
+    padding-top: 24px;
+    margin-right: 24px;
+    margin-left: -72px;
+    right: 100%;
+  }
+}
+
+@media (min-width: 1600px) {
+  .not-found p {
+    font-size: 2rem;
+  }
+}
