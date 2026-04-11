@@ -81,7 +81,7 @@ export const FormSam: React.FC<FormProps> = ({
 
   useEffect(() => {
     if (url && divClass) {
-      // Xóa iframe cũ để render lại với URL mới nhất khi UTM thay đổi
+      // Xóa iframe cũ để render lại với URL mới nhất khi UTM thay đổi.
       const container = document.getElementById(divId);
       if (container) {
         container.innerHTML = "";
