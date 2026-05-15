@@ -5,7 +5,7 @@ import { BtnTheme } from "@/components/BtnTheme";
 import { useModal } from "@/components/ModalContext";
 import { MotionRightLeft } from "@/components/MotionLeft";
 import { MotionTop } from "@/components/MotionTop";
-import { cleanText } from "@/lib/sanitizeHtml";
+import { cleanText } from "@/lib/sanitize-client";
 
 import {
   Box,
@@ -17,28 +17,9 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 
 export const Programs = ({ cms }: { cms: any }) => {
   const { isOpen, onOpen, onClose } = useModal();
-  const [home_content, setHomeContent] = useState<any>(null);
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=trang-chu`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setHomeContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getHomeContent();
-  }, []);
   const programs = [
     {
       title: cms?.obj_1?.title || "Chương Trình Cử Nhân",
@@ -107,13 +88,15 @@ export const Programs = ({ cms }: { cms: any }) => {
             pl={{ lg: 6 }}
           >
             <Text
+              as="p"
               color="white"
               fontSize="16px"
               lineHeight="tall"
+              textShadow="0 1px 2px rgba(0,0,0,0.45)"
               dangerouslySetInnerHTML={{
                 __html: cleanText(
                   cms?.desc ||
-                    "Dù bạn mới tốt nghiệp THPT, đã tốt nghiệp trung cấp, cao đẳng hay đang đi làm và muốn lấy bằng đại học thì đây chắc chắn là nơi dành cho bạn."
+                  "Dù bạn mới tốt nghiệp THPT, đã tốt nghiệp trung cấp, cao đẳng hay đang đi làm và muốn lấy bằng đại học thì đây chắc chắn là nơi dành cho bạn."
                 )
               }}
             />
@@ -163,7 +146,7 @@ export const Programs = ({ cms }: { cms: any }) => {
                       bottom={0}
                       left={0}
                       right={0}
-                      bg="#FF6400D6"
+                      bg="rgba(200, 70, 15, 0.92)"
                       px={8}
                       pt={6}
                       pb={10}
@@ -177,17 +160,25 @@ export const Programs = ({ cms }: { cms: any }) => {
                       flexDirection="column"
                       justifyContent="flex-end"
                     >
-                      <Text
+                      <Heading
+                        as="h3"
                         fontSize="26px"
                         lineHeight={1.2}
                         color="white"
                         mb={2}
                         fontWeight="600"
+                        textShadow="0 1px 2px rgba(0,0,0,0.35)"
                       >
                         {program.title}
-                      </Text>
+                      </Heading>
 
-                      <Text color="white" fontSize="sm" lineHeight="short">
+                      <Text
+                        as="p"
+                        color="white"
+                        fontSize="sm"
+                        lineHeight="short"
+                        textShadow="0 1px 1px rgba(0,0,0,0.35)"
+                      >
                         {program.description}
                       </Text>
                     </Box>

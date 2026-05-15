@@ -1,32 +1,30 @@
-"use client";
-
 import { Box } from "@chakra-ui/react";
 import { Banner } from "../home/Banner";
 import { Benefit } from "../home/Benefit";
 import { Majors } from "../home/Majors";
 import { Slogan } from "../home/Slogan";
 import { IntroduceAbout } from "./IntroduceAbout";
-import { useState, useEffect } from "react";
-export const About = () => {
-  const [page_content, setPageContent] = useState<any>(null);
 
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=gioi-thieu`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+async function getPageContent() {
+  try {
+    const apiUrl = process.env.API_URL || "";
+    const hasSSL = process.env.NEXT_PUBLIC_HAS_SSL || "true";
+    if (hasSSL === "false") process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    const res = await fetch(`${apiUrl}/gioi-thieu`, {
+      next: { revalidate: 3600 }
+    });
+    if (!res.ok) return null;
+    const posts = await res.json();
+    return posts?.[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export const About = async () => {
+  const page_content = await getPageContent();
+
   return (
     <>
       <Box color={"blue.800"}>

@@ -12,7 +12,7 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ListSearchPosts } from "./ListSearchPosts";
 
@@ -22,6 +22,7 @@ export const Search = () => {
   const [isCorrect, setIsCorrect] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const special = "!,%,@,#,$,^,&,*,(,),[,],{,},|,;,:,<,>,/,=";
   const onSearch = (e: React.FormEvent) => {
@@ -44,11 +45,8 @@ export const Search = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    const { keyword } = router.query;
-    setKeyWord(
-      Array.isArray(keyword) ? keyword[0] || "" : (keyword as string) || ""
-    );
-  }, [router.query]);
+    setKeyWord(searchParams?.get("keyword") || "");
+  }, [searchParams]);
 
   const handleRouter = ({ selected }: { selected: number }) => {
     router.push(`/tim-kiem?keyword=${keyWord}&page=${selected + 1}`);

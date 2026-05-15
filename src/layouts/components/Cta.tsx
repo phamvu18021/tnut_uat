@@ -1,26 +1,8 @@
 import { BtnMes, BtnPhone, BtnEmail } from "@/components/BtnCTA";
 import { Box, Flex, VStack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-export const CTA = () => {
-  const [page_content, setPageContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=cta`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+export const CTA = ({ data }: { data: any }) => {
+  const page_content = data;
 
   return (
     <Box

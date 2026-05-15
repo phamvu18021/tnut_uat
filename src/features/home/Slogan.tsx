@@ -1,3 +1,5 @@
+"use client";
+
 import { BtnTheme } from "@/components/BtnTheme";
 import { useModal } from "@/components/ModalContext";
 import { MotionTop } from "@/components/MotionTop";

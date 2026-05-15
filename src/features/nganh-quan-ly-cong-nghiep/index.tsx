@@ -1,29 +1,22 @@
-"use client";
-
 import { MajorPageLayout } from "@/components/major-layout";
 import { defaultMajorData } from "@/data/major-page-data";
-import { useState, useEffect } from "react";
 
-export const NganhQuanLyCongNghiep = () => {
-  const [pageContent, setPageContent] = useState<any>(null);
+async function getPageContent() {
+  try {
+    const apiUrl = process.env.API_URL || "";
+    const hasSSL = process.env.NEXT_PUBLIC_HAS_SSL || "true";
+    if (hasSSL === "false") process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    const res = await fetch(`${apiUrl}/qlcn`, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    const posts = await res.json();
+    return posts?.[0] ?? null;
+  } catch {
+    return null;
+  }
+}
 
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=qlcn`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+export const NganhQuanLyCongNghiep = async () => {
+  const pageContent = await getPageContent();
   const contentData = {
     ...defaultMajorData.content,
     param_1:

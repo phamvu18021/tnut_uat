@@ -31,26 +31,8 @@ const ListHeader = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const Footer = () => {
-  const [page_content, setPageContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=trang-chu`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+export const Footer = ({ data }: { data: any }) => {
+  const page_content = data;
   return (
     <>
       <Box bg={"blue.900"} color={"White"}>

@@ -3,7 +3,7 @@
 import { CardBlog } from "@/components/CardBlog";
 import { HeadSection } from "@/components/HeadSection";
 import { Loading } from "@/components/Loading";
-import { clean } from "@/lib/sanitizeHtml";
+import { clean } from "@/lib/sanitize-client";
 import { formatDate } from "@/ultil/date";
 import {
   Box,

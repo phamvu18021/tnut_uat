@@ -1,29 +1,26 @@
 import { LayoutNganh } from "@/layouts/layoutNganh";
 import { MajorsDetails } from "@/components/MajorsDetails";
-import { useState, useEffect } from "react";
-export const Ktcn = () => {
-  const [page_content, setPageContent] = useState<any>(null);
 
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=ktcn`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+async function getPageContent() {
+  try {
+    const apiUrl = process.env.API_URL || "";
+    const hasSSL = process.env.NEXT_PUBLIC_HAS_SSL || "true";
+    if (hasSSL === "false") process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    const res = await fetch(`${apiUrl}/ktcn`, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    const posts = await res.json();
+    return posts?.[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export const Ktcn = async () => {
+  const page_content = await getPageContent();
+
   return (
     <LayoutNganh
-      title={page_content?.acf?.breadcrumbs?.title || "zKINH TẾ CÔNG NGHIỆP"}
+      title={page_content?.acf?.breadcrumbs?.title || "zKINH TẾ CÔNG NGHIỆP"}
       image={page_content?.acf?.breadcrumbs?.image || "/3.jpg"}
       path="/kinh-te-cong-nghiep"
       major_benefit={page_content?.acf?.major_benefit || ""}
@@ -31,21 +28,21 @@ export const Ktcn = () => {
       <MajorsDetails
         major={
           page_content?.acf?.majors_details?.majors_name ||
-          "zKINH TẾ CÔNG NGHIỆP"
+          "zKINH TẾ CÔNG NGHIỆP"
         }
         image={page_content?.acf?.majors_details?.image || "/tbts-tnut-1.png"}
         image_2={page_content?.acf?.majors_details?.image_2 || ""}
         tabf={
           page_content?.acf?.majors_details?.over?.overview?.title ||
-          ".Tổng quan chương trình"
+          ".Tổng quan chương trình"
         }
         tabs={
           page_content?.acf?.majors_details?.over?.chance?.title ||
-          ".Cơ hội nghề nghiệp"
+          ".Cơ hội nghề nghiệp"
         }
         tabt={
           page_content?.acf?.majors_details?.over?.info?.title ||
-          ".Thông tin tuyển sinh"
+          ".Thông tin tuyển sinh"
         }
         tabfp={[
           page_content?.acf?.majors_details?.over?.overview?.text_1 ||
@@ -61,7 +58,7 @@ export const Ktcn = () => {
           page_content?.acf?.majors_details?.over?.chance?.text_3 ||
             ". .Nghiên cứu viên, tư vấn viên trong lĩnh vực năng lượng và môi trường",
           page_content?.acf?.majors_details?.over?.chance?.text_4 ||
-            ". .Kỹ sư vận hành và quản lý năng lượng trong doanh nghiệp sản xuất",
+            ". .Kỹ sư vận hành và quản lý năng lượng trong doanh nghiệp sản xuất",
           page_content?.acf?.majors_details?.over?.chance?.text_5 ||
             ". .Tham gia giảng dạy tại các trường đại học, cao đẳng...",
           page_content?.acf?.majors_details?.over?.chance?.text_6 ||

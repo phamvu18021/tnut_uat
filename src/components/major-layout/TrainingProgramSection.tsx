@@ -37,7 +37,7 @@ export const TrainingProgramSection = ({
       bgPosition="center center"
       bgRepeat="no-repeat"
       bgSize="cover"
-      // transition="background 0.3s, border-radius 0.3s, opacity 0.3s"
+    // transition="background 0.3s, border-radius 0.3s, opacity 0.3s"
     >
       <Box
         position="absolute"
@@ -72,7 +72,7 @@ export const TrainingProgramSection = ({
             />
 
             <List spacing={3}>
-              {trainning.eligibilityList.map((item, index) => (
+              {trainning?.eligibilityList?.map((item, index) => (
                 <ListItem key={index} display="flex" alignItems="center">
                   <ListIcon as={MdPerson} color="orange.500" />
                   <Text fontSize="16px" color="white">

@@ -36,9 +36,9 @@ export const MotionRightLeft = ({
   if (!useScrollTrigger) {
     return (
       <motion.div
-        initial={{ position: "relative", bottom: 40, right: 300, opacity: 0 }}
-        animate={{ position: "relative", bottom: 40, right: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 2 }}
+        initial={{ opacity: 1, x: 16 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35, delay: 0, ease: "easeOut" }}
       >
         {children}
       </motion.div>

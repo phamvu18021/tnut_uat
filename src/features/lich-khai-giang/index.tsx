@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -12,47 +14,45 @@ import {
 import { Majors } from "../home/Majors";
 import { LkgMain } from "./LkgMain";
 import { LkgTuyensinh } from "./LkgTuyensinh";
-import { useEffect, useState } from "react";
-import { GallerySection } from "./GallerySection";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 
-export const LichKg = () => {
-  const [page_content, setPageContent] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+const GallerySection = dynamic(
+  () => import("./GallerySection").then((mod) => mod.GallerySection),
+  { ssr: false }
+);
 
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=lichkg`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    };
-    getPageContent();
-  }, []);
+export const LichKg = ({ data }: { data: any }) => {
+  const page_content = data;
+
   return (
     <>
-      <Box
-        bg={"rgba(0, 0, 0, 0.5)"}
-        bgImage={
-          page_content?.acf?.breadcrumbs?.image || "url('/bannernews.webp')"
-        }
-        bgSize={"cover"}
-        bgPosition={"bottom"}
-        backgroundBlendMode={"overlay"}
-      >
+      <Box position="relative" overflow="hidden">
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg={"rgba(0, 0, 0, 0.5)"}
+          zIndex={1}
+        />
+        <Image
+          src={page_content?.acf?.breadcrumbs?.image || "/bannernews.webp"}
+          alt="Lịch khai giảng Banner"
+          fill
+          priority
+          loading="eager"
+          style={{ objectFit: "cover", objectPosition: "bottom" }}
+          sizes="100vw"
+        />
         <Container
           maxW={"7xl"}
           py={{ base: "28px", lg: "42px" }}
           color={"white"}
           pl={{ base: 6, lg: 0 }}
+          position="relative"
+          zIndex={2}
         >
           <HStack
             pt={{ base: 8, lg: 16 }}
@@ -107,19 +107,16 @@ export const LichKg = () => {
         </Container>
       </Box>
 
-      {!isLoading && (
-        <LkgMain
-          title={
-            page_content?.acf?.lick_kg?.title || ".KHAI GIẢNG ĐỢT I NĂM 2024"
-          }
-          lichkg1={page_content?.acf?.lick_kg?.lich_kg_hn}
-          lichkg2={page_content?.acf?.lick_kg?.lich_kg_hcm}
-          title_1={page_content?.acf?.lick_kg?.title_1}
-          title_2={page_content?.acf?.lick_kg?.title_2}
-          time_count_1={page_content?.acf?.lick_kg?.time_count_1}
-          time_count_2={page_content?.acf?.lick_kg?.time_count_2}
-        />
-      )}
+      <LkgMain
+        title={page_content?.acf?.lick_kg?.title || ".KHAI GIẢNG ĐỢT I NĂM 2024"}
+        lichkg1={page_content?.acf?.lick_kg?.lich_kg_hn}
+        lichkg2={page_content?.acf?.lick_kg?.lich_kg_hcm}
+        title_1={page_content?.acf?.lick_kg?.title_1}
+        title_2={page_content?.acf?.lick_kg?.title_2}
+        time_count_1={page_content?.acf?.lick_kg?.time_count_1}
+        time_count_2={page_content?.acf?.lick_kg?.time_count_2}
+      />
+
       <GallerySection
         section_title={page_content?.acf?.gallery?.title}
         images={page_content?.acf?.gallery?.list_item}

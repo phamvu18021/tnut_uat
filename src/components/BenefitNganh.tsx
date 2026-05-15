@@ -63,49 +63,51 @@ export const Item = ({
   );
 };
 
+const getBenefits = (major_benefit: any) => [
+  {
+    path: major_benefit?.major_benefit?.benefit_1?.link || "#",
+    title:
+      major_benefit?.major_benefit?.benefit_1?.title ||
+      "zThời gian học tập linh hoạt, phù hợp với mọi đối tượng",
+    desc:
+      major_benefit?.major_benefit?.benefit_1?.desc ||
+      "Với hình thức học tập online, học viên có thể chủ động về kế hoạch cũng như thời gian học tập, đây là ưu điểm vượt trội của chương trình",
+    icon: BiHome
+  },
+  {
+    path: major_benefit?.major_benefit?.benefit_2?.link || "#",
+    title:
+      major_benefit?.major_benefit?.benefit_2?.title ||
+      "Sở hữu bằng đại học uy tín hàng đầu Việt Nam",
+    desc:
+      major_benefit?.major_benefit?.benefit_2?.desc ||
+      "Chương trình học do Đại học Thái Nguyên cấp bằng và được Bộ GD&ĐT công nhận",
+    icon: PiCertificate
+  },
+  {
+    path: major_benefit?.major_benefit?.benefit_3?.link || "#",
+    title:
+      major_benefit?.major_benefit?.benefit_3?.title ||
+      "Đội ngũ giảng viên đầu ngành, giàu kinh nghiệm",
+    desc:
+      major_benefit?.major_benefit?.benefit_3?.desc ||
+      "100% giảng viên tham gia chương trình đều có bằng Thạc sĩ, Tiến sĩ và đều đang giảng dạy và làm việc tại trường",
+    icon: LiaIndustrySolid
+  },
+  {
+    path: major_benefit?.major_benefit?.benefit_4?.link || "#",
+    title:
+      major_benefit?.major_benefit?.benefit_4?.benefit_4?.title ||
+      "96% Sinh viên ra trường có việc làm",
+    desc:
+      major_benefit?.major_benefit?.benefit_4?.desc ||
+      "Dễ dàng hơn khi xin việc, xét bậc tăng lương. Tốt nghiệp bạn đủ điều kiện để học lên Thạc sĩ, Tiến sĩ theo quy định",
+    icon: MdOutlineWorkHistory
+  }
+];
+
 export const BenefitNganh = (major_benefit: any) => {
-  const benefits = [
-    {
-      path: major_benefit?.major_benefit?.benefit_1?.link || "#",
-      title:
-        major_benefit?.major_benefit?.benefit_1?.title ||
-        "zThời gian học tập linh hoạt, phù hợp với mọi đối tượng",
-      desc:
-        major_benefit?.major_benefit?.benefit_1?.desc ||
-        "Với hình thức học tập online, học viên có thể chủ động về kế hoạch cũng như thời gian học tập, đây là ưu điểm vượt trội của chương trình",
-      icon: BiHome
-    },
-    {
-      path: major_benefit?.major_benefit?.benefit_2?.link || "#",
-      title:
-        major_benefit?.major_benefit?.benefit_2?.title ||
-        "Sở hữu bằng đại học uy tín hàng đầu Việt Nam",
-      desc:
-        major_benefit?.major_benefit?.benefit_2?.desc ||
-        "Chương trình học do Đại học Thái Nguyên cấp bằng và được Bộ GD&ĐT công nhận",
-      icon: PiCertificate
-    },
-    {
-      path: major_benefit?.major_benefit?.benefit_3?.link || "#",
-      title:
-        major_benefit?.major_benefit?.benefit_3?.title ||
-        "Đội ngũ giảng viên đầu ngành, giàu kinh nghiệm",
-      desc:
-        major_benefit?.major_benefit?.benefit_3?.desc ||
-        "100% giảng viên tham gia chương trình đều có bằng Thạc sĩ, Tiến sĩ và đều đang giảng dạy và làm việc tại trường",
-      icon: LiaIndustrySolid
-    },
-    {
-      path: major_benefit?.major_benefit?.benefit_4?.link || "#",
-      title:
-        major_benefit?.major_benefit?.benefit_4?.title ||
-        "96% Sinh viên ra trường có việc làm",
-      desc:
-        major_benefit?.major_benefit?.benefit_4?.desc ||
-        "Dễ dàng hơn khi xin việc, xét bậc tăng lương. Tốt nghiệp bạn đủ điều kiện để học lên Thạc sĩ, Tiến sĩ theo quy định",
-      icon: MdOutlineWorkHistory
-    }
-  ];
+  const benefits = getBenefits(major_benefit);
   const { isOpen, onOpen, onClose } = useModal();
   return (
     <Box py={"48px"}>

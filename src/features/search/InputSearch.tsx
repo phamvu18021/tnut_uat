@@ -2,7 +2,7 @@
 
 import { toSlug } from "@/ultil/toSlug";
 import { Box, HStack, Input, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const InputSearch = ({ type }: { type: string }) => {

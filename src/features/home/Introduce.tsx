@@ -12,6 +12,7 @@ import {
   Box,
   Container,
   GridItem,
+  Heading,
   SimpleGrid,
   Stack,
   Text
@@ -45,20 +46,21 @@ export const Introduce = (introduce: any) => {
             </MotionTop>
 
             <MotionTop>
-              <Text
+              <Heading
+                as="h2"
                 fontSize={{ base: "24px", md: "24px", lg: "40px" }}
-                color={"blue.800"}
+                color="blue.900"
                 fontWeight={600}
                 mt={4}
               >
                 {introduce?.introduce?.section_title || "Thông tin tuyển sinh"}
-              </Text>
+              </Heading>
             </MotionTop>
 
             <MotionTop>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color="gray.600"
+                color="gray.700"
                 py={4}
               >
                 {introduce?.introduce?.desc || "Nội dung thông tin tuyển sinh"}
@@ -94,7 +96,7 @@ export const Introduce = (introduce: any) => {
                 >
                   <Text
                     fontSize={{ base: "13px", md: "14px", lg: "16px" }}
-                    color="gray.600"
+                    color="gray.700"
                     lineHeight={{ base: "1.5", md: "1.6", lg: "1.7" }}
                     dangerouslySetInnerHTML={{
                       __html:
@@ -133,7 +135,7 @@ export const Introduce = (introduce: any) => {
                 >
                   <Text
                     fontSize={{ base: "13px", md: "14px", lg: "16px" }}
-                    color="gray.600"
+                    color="gray.700"
                     lineHeight={{ base: "1.5", md: "1.6", lg: "1.7" }}
                     dangerouslySetInnerHTML={{
                       __html:
@@ -172,7 +174,7 @@ export const Introduce = (introduce: any) => {
                 >
                   <Text
                     fontSize={{ base: "13px", md: "14px", lg: "16px" }}
-                    color="gray.600"
+                    color="gray.700"
                     lineHeight={{ base: "1.5", md: "1.6", lg: "1.7" }}
                     dangerouslySetInnerHTML={{
                       __html:
@@ -211,7 +213,7 @@ export const Introduce = (introduce: any) => {
                 >
                   <Text
                     fontSize={{ base: "13px", md: "14px", lg: "16px" }}
-                    color="gray.600"
+                    color="gray.700"
                     lineHeight={{ base: "1.5", md: "1.6", lg: "1.7" }}
                     dangerouslySetInnerHTML={{
                       __html:
@@ -250,7 +252,7 @@ export const Introduce = (introduce: any) => {
                 >
                   <Text
                     fontSize={{ base: "13px", md: "14px", lg: "16px" }}
-                    color="gray.600"
+                    color="gray.700"
                     lineHeight={{ base: "1.5", md: "1.6", lg: "1.7" }}
                     dangerouslySetInnerHTML={{
                       __html:

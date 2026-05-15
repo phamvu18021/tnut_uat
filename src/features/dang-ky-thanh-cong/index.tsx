@@ -62,8 +62,13 @@ export const DangkyTc = () => {
         </Container>
       </Box>
       <Container maxW="7xl" justifyContent="center">
-        <SamePosts catId={news[0]?.categories[0]} id={String(news[0]?.id)} />
-        <Box display={"flex"} justifyContent={"center"} pb={8}>
+        {news.length > 0 && (
+          <SamePosts
+            catId={news[0]?.categories?.[0]}
+            id={String(news[0]?.id)}
+          />
+        )}
+        <Box display={"flex"} justifyContent={"center"} pb={8} pt={8}>
           <BtnTheme
             size={{ base: "sm", md: "lg" }}
             onClick={() => !isOpen && onOpen && onOpen()}

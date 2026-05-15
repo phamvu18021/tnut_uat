@@ -12,7 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { BtnTheme } from "./BtnTheme";
 import { useModal } from "./ModalContext";
-import { MajorSwipe } from "./MajorSwipe";
+import dynamic from "next/dynamic";
+
+const MajorSwipe = dynamic(() => import("./MajorSwipe").then(m => ({ default: m.MajorSwipe })), { ssr: false });
+
 
 interface IMDetails {
   major: string;

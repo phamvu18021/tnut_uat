@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  Box,
+  Button,
   HStack,
   Heading,
   IconButton,
@@ -118,34 +120,33 @@ export const BtnEmail = ({
   label?: string;
 }) => {
   return (
-    <Popover placement="left" trigger="hover">
+    <Popover placement="left" trigger="hover" isLazy={false}>
       <PopoverTrigger>
-        <HStack
-          spacing={0}
+        <Button
+          variant="unstyled"
+          display="flex"
+          alignItems="center"
           borderRadius={0}
           bg={"orange.500"}
           transform={"rotate(270deg)"}
+          aria-label={label || "Tư vấn ngay"}
+          _hover={{ bg: "orange.600" }}
+          height="auto"
+          px={4}
+          py={2}
         >
-          <IconButton
-            icon={<MdEmail />}
-            size="lg"
-            _hover={{}}
-            color={"white"}
-            bg={"orange.500"}
-            p={"8px"}
-            aria-label="email"
-          />
-          <Text pr={2} color={"white"}>
+          <MdEmail size="24px" color="white" />
+          <Text ml={2} color={"white"}>
             {label || "Tư vấn ngay"}
           </Text>
-        </HStack>
+        </Button>
       </PopoverTrigger>
       <PopoverContent zIndex={20}>
         <PopoverArrow />
         <PopoverCloseButton />
 
         <PopoverBody bg={"white"} pt={10} width={"350px"}>
-          <FormWrapper type="form-poup" />
+          <FormWrapper />
         </PopoverBody>
       </PopoverContent>
     </Popover>

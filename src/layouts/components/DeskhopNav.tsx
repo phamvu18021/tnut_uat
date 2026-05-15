@@ -12,7 +12,7 @@ import {
 import { FormWrapper } from "@/components/FormWrapper";
 import { ModalBase } from "@/components/Modal";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 interface INavItem {
   title: string;
@@ -25,11 +25,11 @@ export const DesktopNav = () => {
   const linkHoverColor = "red.500";
   const { onToggle, onOpen, onClose, isOpen } = useDisclosure();
 
-  const rou = useRouter();
+  const pathname = usePathname();
   const [nav, setNav] = useState<"flex" | "none">("none");
 
   useEffect(() => {
-    switch (rou.asPath) {
+    switch (pathname) {
       case "/":
         setNav("none");
         break;
@@ -37,7 +37,7 @@ export const DesktopNav = () => {
       default:
         setNav("flex");
     }
-  }, [rou.asPath]);
+  }, [pathname]);
   return (
     <>
       <Stack direction={"row"} alignItems={"center"}>
@@ -83,7 +83,7 @@ export const DesktopNav = () => {
       </Stack>
 
       <ModalBase isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-        <FormWrapper type="form-poup" />
+        <FormWrapper />
       </ModalBase>
     </>
   );

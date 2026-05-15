@@ -1,3 +1,5 @@
+"use client";
+
 import { BtnTheme } from "@/components/BtnTheme";
 import { useModal } from "@/components/ModalContext";
 import { Box, Skeleton } from "@chakra-ui/react";
@@ -21,25 +23,35 @@ const SkeletonLoader = () => {
   );
 };
 
-export const CardBanner = ({ image }: { image: string }) => {
+export const CardBanner = ({
+  image,
+  isLcp
+}: {
+  image: string;
+  isLcp?: boolean;
+}) => {
   const { isOpen, onOpen } = useModal();
 
   return (
     <Box
       position="relative"
       width="100%"
-      height={{ base: "auto", md: "670px" }} // ✅ auto cho mobile, 670px cho desktop
-      aspectRatio={{ base: "16/9", md: "unset" }} // ✅ giữ tỉ lệ 16:9 ở mobile
+      height={{ base: "auto", md: "670px" }}
+      aspectRatio={{ base: "16/9", md: "unset" }}
       overflow="hidden"
     >
       <Image
-        priority
-        alt="banner"
+        priority={isLcp}
+        fetchPriority={isLcp ? "high" : "low"}
+        loading={isLcp ? "eager" : "lazy"}
+        decoding={isLcp ? "sync" : "async"}
+        alt="Banner tuyển sinh Đại học Kỹ thuật Công nghiệp Thái Nguyên"
         src={image}
         fill
         sizes="100vw"
+        quality={75}
         style={{
-          objectFit: "cover" // hoặc 'contain' nếu bạn muốn giữ nguyên ảnh
+          objectFit: "cover" 
         }}
       />
 
@@ -167,7 +179,7 @@ export const Banner = (imagesBanner: any) => {
       >
         {teachers?.map((teacher, index) => (
           <SwiperSlide key={index} className="swiperSlide">
-            <CardBanner image={teacher.avt} />
+            <CardBanner image={teacher.avt} isLcp={index === 0} />
           </SwiperSlide>
         ))}
       </Swiper>

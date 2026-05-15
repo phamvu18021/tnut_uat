@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DesktopNav } from "../components/DeskhopNav";
 import { HeaderTop } from "../components/HeaderTop";
@@ -26,13 +26,13 @@ import { MobileNav } from "../components/MobileNav";
 
 export const Header = () => {
   const { onToggle, onOpen, onClose, isOpen } = useDisclosure();
-  const rou = useRouter();
+  const pathname = usePathname();
   const [headt, setHeadt] = useState<"flex" | "none" | "sticky">("flex");
   const [nav, setNav] = useState<"flex" | "none">("none");
   const [colorh, setColorh] = useState<"white" | "gray.50">("gray.50");
 
   useEffect(() => {
-    switch (rou.asPath) {
+    switch (pathname) {
       case "/":
         setHeadt("flex");
         setNav("none");
@@ -48,7 +48,7 @@ export const Header = () => {
         setNav("flex");
         setColorh("white");
     }
-  }, [rou.asPath]);
+  }, [pathname]);
 
   return (
     <>
@@ -158,7 +158,7 @@ export const Header = () => {
           </Box>
 
           <ModalBase isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-            <FormWrapper type="form-poup" />
+            <FormWrapper />
           </ModalBase>
         </Container>
       </Box>

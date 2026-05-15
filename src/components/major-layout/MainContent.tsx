@@ -1,32 +1,18 @@
 "use client";
 
+import styles from "@/styles/Post.module.css";
 import {
   Box,
-  Container,
-  Text,
+  Icon,
   SimpleGrid,
-  GridItem,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  List,
-  ListItem,
-  ListIcon,
-  Icon
+  Text
 } from "@chakra-ui/react";
 import {
-  MdPerson,
-  MdCheckCircle,
-  MdSchool,
+  MdAccessTime,
   MdBook,
-  MdAccessTime
+  MdSchool
 } from "react-icons/md";
 import { Badge } from "../Badge";
-import styles from "@/styles/Post.module.css";
 
 interface InfoBoxProps {
   icon: any;

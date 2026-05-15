@@ -25,7 +25,6 @@ const CountdownSection = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <div>Loading...</div>
   }
 );
 
@@ -34,7 +33,6 @@ const Benefit = dynamic(
     import("@/features/home/Benefit").then((mod) => ({ default: mod.Benefit })),
   {
     ssr: false,
-    loading: () => <div>Loading...</div>
   }
 );
 
@@ -45,7 +43,6 @@ const ProgramValuesSection = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <div>Loading...</div>
   }
 );
 
@@ -56,7 +53,6 @@ const TrainingProgramSection = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <div>Loading...</div>
   }
 );
 
@@ -119,19 +115,17 @@ export const MajorPageLayout = ({
   section_kg
 }: MajorPageProps) => {
   const { ref, inView } = useInView({
-    threshold: 0.5 // Kích hoạt khi 50% của phần tử hiển thị trong viewport
+    threshold: 0.5
   });
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem trongView và isVisible đều là true
     if (inView && !isVisible) {
-      setIsVisible(true); // Nếu không thì hiển thị
+      setIsVisible(true);
     }
   }, [inView, isVisible]);
   return (
     <Box>
-      {/* Section 1: Hero với breadcrumb */}
       <Box
         bg={"rgba(0, 0, 0, 0.5)"}
         bgImage={image}
@@ -172,33 +166,30 @@ export const MajorPageLayout = ({
 
           <Breadcrumb
             px={4}
-            spacing="8px"
+            spacing="4px"
             separator={<ChevronRightIcon color="gray.50" />}
             fontWeight="medium"
-            fontSize={{ base: "sm", lg: "md" }}
-            display={"contents"}
+            fontSize={{ base: "13px", lg: "16px" }}
           >
             <BreadcrumbItem color="gray.50" fontWeight={300}>
-              <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
+              <BreadcrumbLink href="/">TRANG CHỦ</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbItem
               color="gray.50"
-              px={4}
               fontWeight={300}
               pointerEvents={"none"}
               cursor={"not-allowed"}
             >
-              <BreadcrumbLink>Chương trình đào tạo</BreadcrumbLink>
+              <BreadcrumbLink>CHƯƠNG TRÌNH ĐÀO TẠO</BreadcrumbLink>
             </BreadcrumbItem>
 
-            <BreadcrumbItem color="gray.50" px={4} fontWeight={600}>
+            <BreadcrumbItem color="gray.50" fontWeight={600}>
               <BreadcrumbLink href={path}>{title}</BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
         </Container>
       </Box>
-      {/* Section 2: Nội dung chính với layout 2 cột */}
       <Container maxW="7xl" py={8}>
         <Flex
           direction={{ base: "column", lg: "row" }}
@@ -206,34 +197,35 @@ export const MajorPageLayout = ({
           align="flex-start"
         >
           <Box flex="3" minW="0">
-            <MainContent content={content} />
+            {content && <MainContent content={content} />}
           </Box>
 
           <Divider
             orientation="vertical"
             borderColor="#ff6400"
             borderWidth="2px"
-            height="-webkit-fill-available"
+            height="auto"
+            alignSelf="stretch"
             display={{ base: "none", lg: "block" }}
           />
 
           <Box flex="1" minW="0" maxW={{ lg: "400px" }}>
-            <Sidebar {...sidebar} />
+            {sidebar && <Sidebar {...sidebar} />}
           </Box>
         </Flex>
       </Container>
-      {/* Section 3: Chương trình đào tạo riêng biệt */}
       <Box ref={ref}>
         {isVisible && (
           <>
-            <TrainingProgramSection trainning={trainning} />
+            {trainning && <TrainingProgramSection trainning={trainning} />}
             <Benefit />
             <CountdownSection
               title={section_kg?.title}
               sub_title={section_kg?.sub_title}
             />
-            {/* Section 4: Giá trị nhận được từ chương trình đào tạo */}
-            <ProgramValuesSection content={programValues} />{" "}
+            {programValues && (
+              <ProgramValuesSection content={programValues} />
+            )}{" "}
           </>
         )}
       </Box>

@@ -36,17 +36,9 @@ export const MotionBot = ({
   if (!useScrollTrigger) {
     return (
       <motion.div
-        initial={{
-          position: "relative",
-          top: -100,
-          opacity: 0
-        }}
-        animate={{
-          position: "relative",
-          top: 0,
-          opacity: 1
-        }}
-        transition={{ duration: 1, delay: 2 }}
+        initial={{ opacity: 1, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0, ease: "easeOut" }}
       >
         {children}
       </motion.div>
@@ -74,7 +66,7 @@ export const MotionBot = ({
               opacity: 0
             }
       }
-      transition={{ duration: 1, delay: 1 }}
+      transition={{ duration: 0.45, delay: 0 }}
     >
       {children}
     </motion.div>

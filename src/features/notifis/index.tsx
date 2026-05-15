@@ -66,7 +66,6 @@ export const Notifis = () => {
             </Box>
 
             <Breadcrumb
-              spacing="8px"
               separator={<ChevronRightIcon color="gray.50" />}
               fontWeight="medium"
               fontSize="md"

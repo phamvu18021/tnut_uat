@@ -13,31 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { DkMain } from "./DkMain";
 import { FAQ } from "./FAQ";
-import { useState, useEffect } from "react";
 import { BenefitNganh } from "@/components/BenefitNganh";
 import { CountdownSection } from "../home/CountdownSection";
 import { Slogan } from "../home/Slogan";
 
-export const Dangky = () => {
-  const [page_content, setPageContent] = useState<any>(null);
-
-  useEffect(() => {
-    const getPageContent = async () => {
-      try {
-        const res = await fetch(`/api/content-page/?type=dang-ky`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setPageContent(data?.posts[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getPageContent();
-  }, []);
+export const Dangky = ({ page_content }: { page_content: any }) => {
   return (
     <>
       <Box

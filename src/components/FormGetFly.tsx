@@ -30,6 +30,7 @@ const buildUtmParamsForGetFly = (): string => {
 const createIframeForGetFly = (url: string): HTMLIFrameElement => {
   const iframe = document.createElement("iframe");
   iframe.setAttribute("src", `${url}${buildUtmParamsForGetFly()}`);
+  iframe.setAttribute("title", "Biểu mẫu đăng ký tuyển sinh");
   iframe.style.width = "100%";
   iframe.style.minHeight = "450px";
   iframe.setAttribute("frameborder", "0");

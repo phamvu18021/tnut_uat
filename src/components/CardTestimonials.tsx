@@ -1,6 +1,6 @@
 "use client";
 
-import { clean } from "@/lib/sanitizeHtml";
+import { clean } from "@/lib/sanitize-client";
 import { Box, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react";
 
 export const CardTestimonials = ({

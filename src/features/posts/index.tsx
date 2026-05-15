@@ -1,7 +1,5 @@
-"use client";
 import { Loading } from "@/components/Loading";
 import { LayoutBottom } from "@/layouts/layoutPosts/LayoutBottom";
-import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Container,
@@ -12,38 +10,46 @@ import {
   Text,
   HStack
 } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Suspense } from "react";
+import { ListPosts } from "./ListPosts";
 
-const ListPosts = dynamic(
-  () => import("./ListPosts").then((mod) => mod.ListPosts),
-  {
-    loading: () => <Loading />
-  }
-);
-
-export const Posts = () => {
-  const router = useRouter();
-  const handleRouter = ({ selected }: { selected: number }) => {
-    router.push(`/tin-tuc?page=${selected + 1}`);
-  };
-
+export const Posts = ({
+  initialPosts,
+  initialTotalPosts
+}: {
+  initialPosts?: any[];
+  initialTotalPosts?: string;
+}) => {
   return (
     <Box pb={"40px"}>
       <Box bg={"#F8F9FA"}>
         <Box
-          bg={"rgba(0, 0, 0, 0.5)"}
-          bgImage={"url('bannernews.webp')"}
-          bgSize={"cover"}
-          bgPosition={"50% 100%"}
-          backgroundBlendMode={"overlay"}
+          pos="relative"
+          overflow="hidden"
+          minH={{ base: "200px", lg: "300px" }}
         >
+          <Image
+            src="/bannernews.webp"
+            alt="Banner News"
+            fill
+            priority
+            fetchPriority="high"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 60vw"
+            quality={90}
+            style={{
+              objectFit: "cover",
+              objectPosition: "50% 100%",
+              filter: "brightness(0.6)"
+            }}
+          />
           <Container
             maxW={"7xl"}
             py={{ base: "28px", lg: "42px" }}
             color={"white"}
             pl={{ base: 6, lg: 0 }}
+            pos="relative"
+            zIndex={1}
           >
             <HStack
               pt={{ base: 8, lg: 16 }}
@@ -80,7 +86,7 @@ export const Posts = () => {
 
             <Breadcrumb
               spacing="8px"
-              separator={<ChevronRightIcon color="gray.50" />}
+              separator={<Text color="gray.50" as="span">/</Text>}
               fontWeight="medium"
               fontSize="md"
               pb={{ base: 2, lg: 8 }}
@@ -101,7 +107,11 @@ export const Posts = () => {
       <Box pt={"20px"}>
         <Suspense fallback={<Loading />}>
           <LayoutBottom sticky="120px">
-            <ListPosts cate="news" handleRouter={handleRouter} />
+            <ListPosts
+              cate="news"
+              initialPosts={initialPosts}
+              initialTotalPosts={initialTotalPosts}
+            />
           </LayoutBottom>
         </Suspense>
       </Box>

@@ -6,24 +6,23 @@ export const useSize = () => {
   const hasWindow = typeof window !== "undefined";
   const [size, setSize] = useState({
     width: hasWindow ? window.innerWidth : 0,
-    height: hasWindow ? window.scrollY : 0,
   });
 
   useEffect(() => {
-    const setHeigth = () => {
-      const newHeight = hasWindow ? window.scrollY : 0;
-      newHeight && setSize((prev) => ({ ...prev, height: newHeight }));
-    };
-    const setWidth = () => {
-      const newWidth = hasWindow ? window.innerWidth : 0;
-      newWidth && setSize((prev) => ({ ...prev, width: newWidth }));
-    };
-    hasWindow && window.addEventListener("scroll", setHeigth);
-    hasWindow && window.addEventListener("resize", setWidth);
+    if (!hasWindow) return;
 
+    let timeoutId: NodeJS.Timeout | null = null;
+    const handleResize = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setSize({ width: window.innerWidth });
+      }, 150); // Debounce resize to avoid excessive re-renders
+    };
+
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("resize", setWidth);
-      window.removeEventListener("scroll", setHeigth);
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
     };
   }, [hasWindow]);
 

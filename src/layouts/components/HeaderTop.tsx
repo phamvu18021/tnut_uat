@@ -18,7 +18,7 @@ export const Tags = ({
 }) => {
   return (
     <Tag
-      color="gray.500"
+      color="gray.800"
       borderRadius="full"
       variant="solid"
       bg={"transparent"}
@@ -26,6 +26,7 @@ export const Tags = ({
       px="8px"
       as={Link}
       href={path}
+      aria-label={`Gọi hotline ${label}`}
     >
       {children}
       <TagLabel fontSize={{ base: "4rem", md: "md" }}>{label}</TagLabel>
@@ -34,29 +35,7 @@ export const Tags = ({
 };
 
 export const HeaderTop = () => {
-  const [id, setId] = useState("");
-  const [href, setHref] = useState("");
-
   const { onOpen, onClose, isOpen, onToggle } = useModal();
-
-  useEffect(() => {
-    const getForm = async () => {
-      try {
-        const res = await fetch(`/api/data-form/?type=form-main`);
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data = await res.json();
-        const id = data?.id || "";
-        id && setId(id);
-        const href = data?.href || "";
-        href && setHref(href);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getForm();
-  }, [id, href, isOpen]);
   return (
     <>
       <HStack align={"center"} justify={"space-between"} py={2}>
@@ -87,7 +66,7 @@ export const HeaderTop = () => {
         onClose={() => onClose && onClose()}
         onOpen={() => onOpen && onOpen()}
       >
-        <FormWrapper type="form-poup" />
+        <FormWrapper />
       </ModalBase>
     </>
   );

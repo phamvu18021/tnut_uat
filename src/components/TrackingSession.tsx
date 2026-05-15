@@ -1,6 +1,6 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useEffect, Suspense, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const utmKeys = [
   "utm_source",
@@ -12,53 +12,60 @@ const utmKeys = [
   "utm_id"
 ];
 
-export const TrackingSession = () => {
-  const router = useRouter();
+const TrackingSessionInner = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const processingRef = useRef(false);
 
   useEffect(() => {
     const handleUTM = () => {
-      // Sử dụng setTimeout 0ms để đảm bảo trình duyệt đã cập nhật window.location.search sau khi chuyển trang
-      setTimeout(() => {
-        if (typeof window === "undefined") return;
+      if (typeof window === "undefined" || processingRef.current) return;
 
-        const params = new URLSearchParams(window.location.search);
-        const utmData: Record<string, string> = {};
-        let hasUTM = false;
+      processingRef.current = true;
+
+      try {
+        const currentParams = new URLSearchParams(window.location.search);
+        let hasNewUTM = false;
+        const utmDataFromUrl: Record<string, string> = {};
 
         // 1. Lấy UTM từ URL hiện tại
         utmKeys.forEach((key) => {
-          const value = params.get(key);
+          const value = currentParams.get(key);
           if (value) {
-            hasUTM = true;
-            utmData[key] = value;
+            hasNewUTM = true;
+            utmDataFromUrl[key] = value;
           }
         });
 
-        // Kiểm tra referrer
-        if (document.referrer) {
-          const saved = sessionStorage.getItem("utm_data");
-          const savedData = saved ? JSON.parse(saved) : {};
-          if (document.referrer !== savedData.utm_referrer) {
-            hasUTM = true;
-            utmData["utm_referrer"] = document.referrer;
+        // 2. Kiểm tra referrer và cập nhật session storage
+        const saved = sessionStorage.getItem("utm_data");
+        let savedData = saved ? JSON.parse(saved) : null;
+
+        if (hasNewUTM) {
+          // Trường hợp URL có UTM mới -> Ghi đè (Last Click)
+          if (document.referrer && !document.referrer.includes(window.location.host)) {
+            utmDataFromUrl["utm_referrer"] = document.referrer;
+          } else if (savedData?.utm_referrer) {
+            // Giữ lại referrer cũ nếu đây là navigation nội bộ nhưng có UTM mới (hiếm gặp nhưng có thể)
+            utmDataFromUrl["utm_referrer"] = savedData.utm_referrer;
+          }
+          sessionStorage.setItem("utm_data", JSON.stringify(utmDataFromUrl));
+          savedData = utmDataFromUrl;
+        } else if (!savedData) {
+          // Lần đầu vào web mà không có UTM -> Lưu referrer nếu có
+          if (document.referrer && !document.referrer.includes(window.location.host)) {
+            const firstData = { utm_referrer: document.referrer };
+            sessionStorage.setItem("utm_data", JSON.stringify(firstData));
+            savedData = firstData;
           }
         }
 
-        // Lưu vào session (Ghi đè hoàn toàn - Last Click)
-        if (hasUTM) {
-          sessionStorage.setItem("utm_data", JSON.stringify(utmData));
-        }
-
-        // 2. Đồng bộ ngược lại URL nếu URL đang thiếu
-        const saved = sessionStorage.getItem("utm_data");
-        if (saved) {
-          const storedData = JSON.parse(saved);
-          const currentParams = new URLSearchParams(window.location.search);
+        // 3. Đồng bộ ngược lại URL nếu URL đang thiếu UTM nhưng session có lưu
+        if (savedData) {
           let changed = false;
-
           utmKeys.forEach((key) => {
-            if (key !== "utm_referrer" && !currentParams.has(key) && storedData[key]) {
-              currentParams.set(key, storedData[key]);
+            if (key !== "utm_referrer" && !currentParams.has(key) && savedData[key]) {
+              currentParams.set(key, savedData[key]);
               changed = true;
             }
           });
@@ -68,13 +75,26 @@ export const TrackingSession = () => {
             window.history.replaceState({}, "", newUrl);
           }
         }
-      }, 0);
+      } catch (e) {
+        console.error("Error in handleUTM:", e);
+      } finally {
+        // Reset flag sau một khoảng thời gian ngắn để tránh loop nếu replaceState gây trigger useEffect
+        setTimeout(() => {
+          processingRef.current = false;
+        }, 100);
+      }
     };
 
     handleUTM();
-    router.events.on("routeChangeComplete", handleUTM);
-    return () => router.events.off("routeChangeComplete", handleUTM);
-  }, [router.asPath]); // Lắng nghe asPath để đảm bảo cập nhật ngay khi đổi URL
+  }, [pathname, searchParams]);
 
   return null;
+};
+
+export const TrackingSession = () => {
+  return (
+    <Suspense fallback={null}>
+      <TrackingSessionInner />
+    </Suspense>
+  );
 };

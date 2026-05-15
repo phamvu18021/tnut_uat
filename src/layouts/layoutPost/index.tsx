@@ -1,4 +1,4 @@
-"use client";
+
 
 import { Sidebar } from "@/layouts/components/Sidebar";
 import { Container, GridItem, SimpleGrid } from "@chakra-ui/react";

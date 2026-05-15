@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useEffect, Suspense } from "react";
+import { usePathname } from "next/navigation";
 
-// Hàm đọc các trường từ sessionStorage
 const getTrackingParamsFromSession = (): string => {
   const keys = [
     "utm_source",
@@ -27,42 +26,11 @@ const getTrackingParamsFromSession = (): string => {
     });
     return queryParams.toString();
   }
-
   return "";
 };
 
-// Hàm tạo iframe
-const createIframeForSam = (
-  url: string,
-  uuid: string,
-  divClass: string
-): HTMLIFrameElement => {
-  const trackingQuery = getTrackingParamsFromSession();
-  const fullUrl = trackingQuery ? `${url}?${trackingQuery}` : url;
-
-  const iframe = document.createElement("iframe");
-  iframe.setAttribute("src", fullUrl);
-  iframe.style.width = "100%";
-  iframe.style.minHeight = "420px";
-  iframe.classList.add(divClass);
-  return iframe;
-};
-
-// Hàm gắn iframe vào container
-const attachIframeForSam = (
-  url: string,
-  uuid: string,
-  divId: string,
-  divClass: string
-): void => {
-  const containers = document.getElementsByClassName(divClass);
-  Array.from(containers).forEach((container) => {
-    if (!container.querySelector("iframe")) {
-      const iframe = createIframeForSam(url, uuid, divClass);
-      container.appendChild(iframe);
-    }
-  });
-};
+import { Skeleton, Box } from "@chakra-ui/react";
+import { useRef, useState } from "react";
 
 interface FormProps {
   url: string;
@@ -71,24 +39,61 @@ interface FormProps {
   divClass: string;
 }
 
-export const FormSam: React.FC<FormProps> = ({
+
+export const FormSamInner: React.FC<FormProps> = ({
   url,
   uuid,
   divId,
   divClass
 }) => {
-  const router = useRouter();
+  const pathname = usePathname();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (url && divClass) {
-      // Xóa iframe cũ để render lại với URL mới nhất khi UTM thay đổi.
-      const container = document.getElementById(divId);
-      if (container) {
-        container.innerHTML = "";
+    if (url && containerRef.current) {
+      const container = containerRef.current;
+      
+      if (!container.querySelector("iframe")) {
+        const trackingQuery = getTrackingParamsFromSession();
+        const fullUrl = trackingQuery ? `${url}?${trackingQuery}` : url;
+        const iframe = document.createElement("iframe");
+        iframe.setAttribute("src", fullUrl);
+        iframe.style.width = "100%";
+        iframe.style.minHeight = "420px";
+        iframe.classList.add(divClass);
+        
+        iframe.onload = () => {
+          setIsLoaded(true);
+        };
+        
+        container.appendChild(iframe);
+      } else {
+        setIsLoaded(true);
       }
-      attachIframeForSam(url, uuid, divId, divClass);
     }
-  }, [url, uuid, divId, divClass, router.asPath]);
+  }, [url, uuid, divClass, pathname]);
 
-  return <div id={divId} className={divClass}></div>;
+  return (
+    <Box w="100%">
+      {!isLoaded && (
+        <Skeleton height="420px" width="100%" />
+      )}
+      <div 
+        ref={containerRef} 
+        id={divId} 
+        className={divClass} 
+        style={{ display: isLoaded ? "block" : "none" }}
+      ></div>
+    </Box>
+  );
+};
+
+
+export const FormSam: React.FC<FormProps> = (props) => {
+  return (
+    <Suspense fallback={null}>
+      <FormSamInner {...props} />
+    </Suspense>
+  );
 };

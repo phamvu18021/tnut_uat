@@ -76,10 +76,11 @@
   padding-bottom: 8px;
   padding-top: 8px;
 }
-.post__main img {
+.post__main img,
+.post__main figure {
   display: block;
   margin: 0 auto;
-  padding-top: 12px;
+  margin-top: 12px;
   padding-bottom: 10px;
 }
 .post__main figcaption {
@@ -110,8 +111,8 @@
 .post__heading h1 {
   font-size: 1.7rem;
   font-weight: bold;
-  text-align: "center";
-  padding-bottom: "16px";
+  text-align: center;
+  padding-bottom: 16px;
 }
 
 .not-found {

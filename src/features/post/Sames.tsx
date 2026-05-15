@@ -1,79 +1,39 @@
 "use client";
 
-import { CardBlog } from "@/components/CardBlog";
-import {
-  Box,
-  Button,
-  Divider,
-  GridItem,
-  HStack,
-  Heading,
-  SimpleGrid
-} from "@chakra-ui/react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { formatDate } from "@/ultil/date";
+import { SamePostsContent } from "./SamePostsContent";
 
-export const SamePosts = ({ catId, id }: { catId?: string; id?: string }) => {
+export const SamePosts = ({
+  catId,
+  id
+}: {
+  catId?: string;
+  id?: string;
+}) => {
   const [samePosts, setSamePosts] = useState<any[]>([]);
 
   useEffect(() => {
+    if (!catId) return;
+
     const getSamePosts = async () => {
       try {
-        if (catId) {
-          const res = await fetch(`/api/same-posts/?catId=${catId}&id=${id}`, {
-            next: { revalidate: 3 }
-          });
-          if (!res.ok) {
-            throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-          }
-          const data: { samePosts: any[] } = await res.json();
-          const { samePosts } = data;
-          if (samePosts?.length) setSamePosts(samePosts);
-        }
+        const response = await fetch(
+          `/api/posts/?categories=${catId}&exclude=${id}&per_page=3`
+        );
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const relatedPosts = data.posts || [];
+        setSamePosts(relatedPosts);
       } catch (error) {
-        console.log(error);
+        console.error("Fetch Same Posts Error:", error);
       }
     };
 
     getSamePosts();
   }, [catId, id]);
 
-  return (
-    <>
-      <Divider pt={"32px"} />
-      <Box pt={"20px"}>
-        <HStack justifyContent={"space-between"} pb={"16px"}>
-          <Heading as={"h3"} size={"md"}>
-            Bài viết liên quan
-          </Heading>
-          <Button
-            as={Link}
-            href={"/tin-tuc"}
-            variant={"link"}
-            colorScheme="red"
-          >
-            Xem tất cả
-          </Button>
-        </HStack>
+  if (!catId || !samePosts.length) return null;
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={"20px"}>
-          {samePosts.map((postCat, index) => {
-            if (index < 3)
-              return (
-                <GridItem key={index}>
-                  <CardBlog
-                    date={postCat?.date ? formatDate(postCat.date) : ""}
-                    title={postCat?.title?.rendered}
-                    desc=""
-                    image={postCat?.featured_image || ""}
-                    path={`/${postCat.slug}`}
-                  />
-                </GridItem>
-              );
-          })}
-        </SimpleGrid>
-      </Box>
-    </>
-  );
+  return <SamePostsContent samePosts={samePosts} />;
 };

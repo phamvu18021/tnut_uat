@@ -25,7 +25,7 @@ export const Logo = () => {
           fontSize={{ lg: "12px", base: "8px" }}
           textAlign={"center"}
           fontWeight={500}
-          color={"gray.500"}
+          color={"gray.700"}
           display={{ base: "none", lg: "contents" }}
         >
           ĐẠI HỌC THÁI NGUYÊN
@@ -41,7 +41,7 @@ export const Logo = () => {
           fontSize={{ lg: "12px", base: "8px" }}
           textAlign={"center"}
           fontWeight={500}
-          color={"gray.500"}
+          color={"gray.700"}
           display={{ base: "none", lg: "contents" }}
         >
           THAINGUYEN UNIVERSITY OF TECHNOLOGY

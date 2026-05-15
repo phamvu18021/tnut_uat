@@ -18,6 +18,7 @@ export const FormGoogle: React.FC<FormGoogleProps> = ({ url, divId }) => {
     if (container && !container.querySelector("iframe")) {
       const iframe = document.createElement("iframe");
       iframe.src = url;
+      iframe.title = "Biểu mẫu Google đăng ký tuyển sinh";
       iframe.width = "100%";
       iframe.height = "450px";
       iframe.frameBorder = "0";

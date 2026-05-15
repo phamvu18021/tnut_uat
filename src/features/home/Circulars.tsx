@@ -66,7 +66,7 @@ export const Circulars = (circulars: any) => {
               {inView && (
                 <AspectRatio maxW="560px" ratio={16 / 9} maxH={"315px"}>
                   <iframe
-                    title="Video"
+                    title="Video giới thiệu chương trình đào tạo từ xa Đại học Kỹ thuật Công nghiệp"
                     src={videoSrc}
                     loading="lazy"
                     allowFullScreen

@@ -1,6 +1,5 @@
 "use client";
 
-import { clean } from "@/lib/sanitizeHtml";
 import {
   Avatar,
   AvatarBadge,
@@ -16,11 +15,11 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export const CardBlog = ({
   image,
   title,
+  plain_title,
   desc,
   path,
   date,
@@ -29,17 +28,13 @@ export const CardBlog = ({
 }: {
   image?: string;
   title: string;
+  plain_title?: string;
   desc: string;
   path: string;
   date?: string;
   imageH?: string;
   preview?: boolean;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
   return (
     <Box
       as={Link}
@@ -74,7 +69,7 @@ export const CardBlog = ({
                   height={436}
                   src={image || `/blog.webp`}
                   style={{ maxHeight: imageH }}
-                  alt={title}
+                  alt={plain_title || "Ảnh minh họa"}
                 />
               </Box>
             </Box>
@@ -94,25 +89,23 @@ export const CardBlog = ({
                 overflow: "hidden",
                 textOverflow: "ellipsis"
               }}
-              dangerouslySetInnerHTML={{ __html: clean(title) }}
+              dangerouslySetInnerHTML={{ __html: title }}
             />
             <Text fontSize={"md"} mt={-2} color={"facebook.600"}>
               {date?.slice(5)}
             </Text>
-            {isMounted && (
-              <Text
-                color={"gray.500"}
-                fontSize={".8rem"}
-                css={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: "2",
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
-                dangerouslySetInnerHTML={{ __html: clean(desc) }}
-              />
-            )}
+            <Text
+              color={"gray.500"}
+              fontSize={".8rem"}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: "2",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
           </Stack>
         </Box>
       </Flex>
@@ -123,6 +116,7 @@ export const CardBlog = ({
 export const CardBlogS = ({
   image,
   title,
+  plain_title,
   desc,
   path,
   tag,
@@ -132,6 +126,7 @@ export const CardBlogS = ({
 }: {
   image?: string;
   title: string;
+  plain_title?: string;
   desc: string;
   path: string;
   tag?: string;
@@ -139,12 +134,6 @@ export const CardBlogS = ({
   date?: string;
   imageH?: string;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
-
   return (
     <Box
       as={Link}
@@ -166,7 +155,7 @@ export const CardBlogS = ({
                 height={320}
                 src={image || `/blog.webp`}
                 style={{ maxHeight: imageH }}
-                alt={title}
+                alt={plain_title || "Ảnh minh họa"}
               />
             </Box>
           </Box>
@@ -187,25 +176,23 @@ export const CardBlogS = ({
                 overflow: "hidden",
                 textOverflow: "ellipsis"
               }}
-              dangerouslySetInnerHTML={{ __html: clean(title) }}
+              dangerouslySetInnerHTML={{ __html: title }}
             />
             <Text fontSize={"md"} pb={1} color={"gray.400"}>
               {date?.slice(5)}
             </Text>
-            {isMounted && (
-              <Text
-                color={"gray.500"}
-                fontSize={".9rem"}
-                css={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
-                dangerouslySetInnerHTML={{ __html: clean(desc) }}
-              />
-            )}
+            <Text
+              color={"gray.500"}
+              fontSize={".9rem"}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
           </Stack>
         </GridItem>
       </SimpleGrid>
@@ -232,11 +219,6 @@ export const CardLBlog = ({
   date?: string;
   imageH?: string;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
   return (
     <Box
       as={Link}
@@ -269,7 +251,7 @@ export const CardLBlog = ({
                 height={436}
                 src={image || `/blog.webp`}
                 style={{ maxHeight: imageH }}
-                alt={title}
+                alt={"Ảnh minh họa"}
               />
             </Box>
           </Box>
@@ -287,7 +269,7 @@ export const CardLBlog = ({
                 overflow: "hidden",
                 textOverflow: "ellipsis"
               }}
-              dangerouslySetInnerHTML={{ __html: clean(title) }}
+              dangerouslySetInnerHTML={{ __html: title }}
             />
             <Stack align={"center"} direction="row" h="28px">
               <Text
@@ -329,21 +311,19 @@ export const CardLBlog = ({
               {tags}
             </Text>
 
-            {isMounted && (
-              <Text
-                pt={4}
-                color={"gray.500"}
-                fontSize={{ base: "14px", lg: "16px" }}
-                css={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: "2",
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
-                dangerouslySetInnerHTML={{ __html: clean(desc) }}
-              />
-            )}
+            <Text
+              pt={4}
+              color={"gray.500"}
+              fontSize={{ base: "14px", lg: "16px" }}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: "2",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
           </Stack>
         </Box>
       </Flex>
@@ -369,11 +349,6 @@ export const CardBlogEvent = ({
   date?: string;
   imageH?: string;
 }) => {
-  const [isMounted, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  }, []);
   return (
     <Center
       as={Link}
@@ -414,7 +389,7 @@ export const CardBlogEvent = ({
               height={350}
               src={image || `/blog.webp`}
               style={{ maxHeight: imageH }}
-              alt={title}
+              alt={"Ảnh minh họa"}
             />
           </Box>
           <Stack>
@@ -423,7 +398,13 @@ export const CardBlogEvent = ({
                 <Text
                   fontWeight={600}
                   fontSize={".8rem"}
-                  bg={bgTag || "green.500"}
+                  bg={
+                    bgTag === "green.500"
+                      ? "green.700"
+                      : bgTag === "red.500"
+                        ? "red.700"
+                        : bgTag || "green.700"
+                  }
                   py={"6px"}
                   px={"12px"}
                   color={"white"}
@@ -448,26 +429,22 @@ export const CardBlogEvent = ({
                   overflow: "hidden",
                   textOverflow: "ellipsis"
                 }}
-                dangerouslySetInnerHTML={{ __html: clean(title) }}
+                dangerouslySetInnerHTML={{ __html: title }}
               />
             </Box>
 
-            {isMounted && (
-              <Box h={"5rem"}>
-                <Text
-                  color={"gray.500"}
-                  fontSize={".8rem"}
-                  css={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: "4",
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                  }}
-                  dangerouslySetInnerHTML={{ __html: desc }}
-                />
-              </Box>
-            )}
+            <Text
+              color={"gray.500"}
+              fontSize={".8rem"}
+              css={{
+                display: "-webkit-box",
+                WebkitLineClamp: "4",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              dangerouslySetInnerHTML={{ __html: desc }}
+            />
           </Stack>
         </Box>
         <Stack mt={6} direction={"row"} spacing={4} align={"center"}>

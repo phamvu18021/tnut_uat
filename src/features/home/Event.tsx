@@ -2,65 +2,29 @@
 
 import { CardBlogEvent } from "@/components/CardBlog";
 import { HeadSectionEvent } from "@/components/HeadSection";
-import {
-  Button,
-  Container,
-  GridItem,
-  HStack,
-  Heading,
-  SimpleGrid
-} from "@chakra-ui/react";
+import { Container, GridItem, HStack, Heading, SimpleGrid, Button } from "@chakra-ui/react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
-export const Event = () => {
-  const [news, setNews] = useState<any[]>([]);
-  const [notifis, setNotifis] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`/api/posts/?type=news&page=1`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data: { posts: any[]; totalPosts: string } = await res.json();
-        const { posts } = data;
-        posts?.length && setNews([posts[0], posts[1], posts[2], posts[4]]);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    };
-
-    getPosts();
-  }, []);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`/api/posts/?type=notifis&page=1`, {
-          next: { revalidate: 3 }
-        });
-        if (!res.ok) {
-          throw new Error(`Posts fetch failed with status: ${res.statusText}`);
-        }
-        const data: { posts: any[]; totalPosts: string } = await res.json();
-        const { posts } = data;
-        posts?.length && setNotifis([posts[0], posts[1], posts[2], posts[4]]);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    };
-
-    getPosts();
-  }, []);
+export const Event = ({
+  news: initialNews,
+  notifis: initialNotifis
+}: {
+  news?: any[];
+  notifis?: any[];
+}) => {
+  const news = initialNews?.length
+    ? [initialNews[0], initialNews[1], initialNews[2], initialNews[4]].filter(
+        Boolean
+      )
+    : [];
+  const notifis = initialNotifis?.length
+    ? [
+        initialNotifis[0],
+        initialNotifis[1],
+        initialNotifis[2],
+        initialNotifis[4]
+      ].filter(Boolean)
+    : [];
 
   return (
     <Container maxW={"7xl"} py={"64px"}>
@@ -88,8 +52,9 @@ export const Event = () => {
                 image={post?.featured_image || ""}
                 tag="Tin tức"
                 bgTag="red.500"
-                title={post?.title?.rendered || ""}
-                desc={post?.excerpt?.rendered || ""}
+                title={post?.title || ""}
+                desc={post?.excerpt || ""}
+                date={post?.date || ""}
                 path={`/${post.slug}`}
               />
             ))}
@@ -114,8 +79,9 @@ export const Event = () => {
                   image={post?.featured_image || ""}
                   tag="Thông báo"
                   bgTag="green.500"
-                  title={post?.title?.rendered || ""}
-                  desc={post?.excerpt?.rendered || ""}
+                  title={post?.title || ""}
+                  desc={post?.excerpt || ""}
+                  date={post?.date || ""}
                   path={`/${post.slug}`}
                 />
               ))}

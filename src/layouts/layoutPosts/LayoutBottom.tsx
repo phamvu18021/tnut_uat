@@ -1,4 +1,4 @@
-"use client";
+
 
 import { Container, GridItem, SimpleGrid } from "@chakra-ui/react";
 import { ReactNode } from "react";

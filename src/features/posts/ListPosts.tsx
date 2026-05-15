@@ -2,7 +2,6 @@
 
 import { CardBlog } from "@/components/CardBlog";
 import { Loading } from "@/components/Loading";
-import { clean } from "@/lib/sanitizeHtml";
 import { formatDate } from "@/ultil/date";
 import {
   Box,
@@ -13,7 +12,7 @@ import {
   SimpleGrid
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
@@ -55,18 +54,27 @@ const StyledPaginate = styled(ReactPaginate)`
 
 export const ListPosts = ({
   handleRouter,
-  cate
+  cate,
+  initialPosts,
+  initialTotalPosts
 }: {
   cate: string;
   handleRouter?: ({ selected }: { selected: number }) => void;
+  initialPosts?: any[];
+  initialTotalPosts?: string;
 }) => {
   const router = useRouter();
-  const page = router.query.page || 1;
-  const [posts, setPosts] = useState<any[]>([]);
-  const [totalPosts, setTotalPosts] = useState("0");
-  const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const page = searchParams?.get("page") || "1";
+  const [posts, setPosts] = useState<any[]>(initialPosts || []);
+  const [totalPosts, setTotalPosts] = useState(initialTotalPosts || "0");
+  const [isLoading, setIsLoading] = useState(!initialPosts);
 
   useEffect(() => {
+    if (page === "1" && initialPosts && posts === initialPosts) {
+      return;
+    }
+
     const getPosts = async () => {
       setIsLoading(true);
       try {
@@ -78,8 +86,8 @@ export const ListPosts = ({
         }
         const data: { posts: any[]; totalPosts: string } = await res.json();
         const { posts, totalPosts } = data;
-        posts?.length && setPosts(posts);
-        totalPosts && setTotalPosts(totalPosts);
+        setPosts(posts || []);
+        setTotalPosts(totalPosts || "0");
       } catch (error) {
         console.log(error);
       }
@@ -104,12 +112,13 @@ export const ListPosts = ({
         </Heading>
         {!isLoading && (
           <SimpleGrid pt={2} columns={{ base: 1, md: 2, lg: 2 }} spacing={"8"}>
-            {posts?.map((post: any, index: number) => (
-              <GridItem key={index}>
+            {posts?.map((post: any) => (
+              <GridItem key={post.id}>
                 <CardBlog
                   date={post?.date ? formatDate(post.date) : ""}
-                  title={post?.title?.rendered}
-                  desc={clean("")}
+                  title={post?.title}
+                  plain_title={post?.plain_title}
+                  desc={post?.excerpt}
                   image={post?.featured_image || ""}
                   path={`/${post?.slug}`}
                 />
@@ -126,16 +135,21 @@ export const ListPosts = ({
       </Box>
       {posts?.length > 0 && (
         <HStack pt={"32px"} justify={"center"}>
-          <StyledPaginate
-            previousLabel="<"
-            nextLabel=">"
-            pageCount={len}
-            onPageChange={handleRouter}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={1}
-            activeClassName="active"
-            forcePage={Number(page) - 1}
-          />
+          <Box as="nav" aria-label="Pagination">
+              <StyledPaginate
+                previousLabel="<"
+                nextLabel=">"
+                pageCount={len}
+                onPageChange={({ selected }) => {
+                  router.push(`/tin-tuc?page=${selected + 1}`);
+                }}
+                pageRangeDisplayed={1}
+                marginPagesDisplayed={1}
+                activeClassName="active"
+                forcePage={Number(page) - 1}
+                containerClassName="pagination"
+              />
+          </Box>
         </HStack>
       )}
     </>

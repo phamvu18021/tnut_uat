@@ -9,6 +9,7 @@ import {
   Flex,
   Grid,
   GridItem,
+  Heading,
   Text,
   VStack
 } from "@chakra-ui/react";
@@ -16,15 +17,28 @@ import { useEffect, useState } from "react";
 
 export const CountdownSection = ({
   title,
-  sub_title
+  sub_title,
+  homeContent
 }: {
   title?: string;
   sub_title?: string;
+  homeContent?: any | null;
 }) => {
-  const [targetDate, setTargetDate] = useState<any>("2025-11-16T00:00:00");
-  const [home_content, setHomeContent] = useState<any>(null);
+  const [targetDate, setTargetDate] = useState<any>(
+    () =>
+      homeContent?.acf?.info_lkg?.time_column?.time_count ||
+      "2025-11-16T00:00:00"
+  );
+  const [fetchedContent, setFetchedContent] = useState<any>(null);
+
+  const cms = homeContent ?? fetchedContent;
 
   useEffect(() => {
+    if (homeContent != null) {
+      const t = homeContent?.acf?.info_lkg?.time_column?.time_count;
+      if (t) setTargetDate(t);
+      return;
+    }
     const getTargetDate = async () => {
       try {
         const res = await fetch(`/api/content-page/?type=trang-chu`, {
@@ -34,14 +48,14 @@ export const CountdownSection = ({
           throw new Error(`Posts fetch failed with status: ${res.statusText}`);
         }
         const data = await res.json();
-        setHomeContent(data?.posts[0]);
+        setFetchedContent(data?.posts[0]);
         setTargetDate(data?.posts[0]?.acf?.info_lkg?.time_column?.time_count);
       } catch (error) {
         console.log(error);
       }
     };
     getTargetDate();
-  }, []);
+  }, [homeContent]);
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -128,12 +142,15 @@ export const CountdownSection = ({
                   _hover={{ bg: "#B91C1C" }}
                   transition="all 0.3s ease"
                 >
-                  {home_content?.acf?.info_lkg?.left_column?.sub_title ||
-                    "CHỈ CẦN BẰNG THPT."}
+                  <Text as="span" fontWeight="bold">
+                    {cms?.acf?.info_lkg?.left_column?.sub_title ||
+                      "CHỈ CẦN BẰNG THPT."}
+                  </Text>
                 </Button>
               </MotionRightLeft>
 
-              <Text
+              <Heading
+                as="h2"
                 fontSize={{ base: "22px", md: "26px", lg: "30px" }}
                 fontWeight="bold"
                 color="blue.800"
@@ -142,7 +159,7 @@ export const CountdownSection = ({
               >
                 {title ||
                   "XÉT TUYỂN HỒ SƠ HỆ ĐẠI HỌC TỪ XA NGÀNH KỸ THUẬT XÂY DỰNG."}
-              </Text>
+              </Heading>
 
               <Text
                 fontSize="15px"
@@ -168,26 +185,26 @@ export const CountdownSection = ({
               >
                 <VStack spacing={4} align="center">
                   <VStack>
-                    <Text
-                      fontSize="28px"
-                      fontWeight="bold"
-                      color="#FCD34D"
-                      textAlign="center"
-                      lineHeight={1.2}
-                    >
-                      {home_content?.acf?.info_lkg?.time_column?.title ||
-                        "LỊCH KHAI GIẢNG"}
-                    </Text>
+              <Heading
+                as="h3"
+                fontSize="28px"
+                fontWeight="bold"
+                color="#FCD34D"
+                textAlign="center"
+                lineHeight={1.2}
+              >
+                {cms?.acf?.info_lkg?.time_column?.title || "LỊCH KHAI GIẢNG"}
+              </Heading>
 
-                    <Text
-                      fontSize="18px"
-                      fontWeight="bold"
-                      color="#FCD34D"
-                      textAlign="center"
-                    >
-                      {home_content?.acf?.info_lkg?.time_column?.text_time ||
-                        "16/11/2025"}
-                    </Text>
+              <Text
+                as="p"
+                fontSize="18px"
+                fontWeight="bold"
+                color="#FCD34D"
+                textAlign="center"
+              >
+                {cms?.acf?.info_lkg?.time_column?.text_time || "16/11/2025"}
+              </Text>
                   </VStack>
 
                   <Flex gap={2} flexWrap="wrap" justify="center">

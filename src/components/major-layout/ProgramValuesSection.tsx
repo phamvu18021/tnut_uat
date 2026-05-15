@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useModal } from "../ModalContext";
 import { BtnTheme } from "../BtnTheme";
-import { cleanText } from "@/lib/sanitizeHtml";
+import { cleanText } from "@/lib/sanitize-client";
 
 interface ProgramValuesSectionProps {
   section_title?: string;

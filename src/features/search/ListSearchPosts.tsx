@@ -2,12 +2,12 @@
 
 import { CardBlog } from "@/components/CardBlog";
 import { Loading } from "@/components/Loading";
-import { clean } from "@/lib/sanitizeHtml";
+import { clean } from "@/lib/sanitize-client";
 import { formatDate } from "@/ultil/date";
 import { toSlug } from "@/ultil/toSlug";
 import { Box, Center, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
@@ -63,19 +63,14 @@ export const ListSearchPosts = ({
   const [isLoading, setIsLoading] = useState(true);
   const [resetpagi, setResetpagi] = useState(false);
 
-  const router = useRouter();
+  const searchParams = useSearchParams();
   useEffect(() => {
     setResetpagi(true);
-  }, [router.query.page]);
+  }, [searchParams]);
 
   useEffect(() => {
-    const { keyword, page } = router.query;
-    let keywords = Array.isArray(keyword)
-      ? keyword[0] || ""
-      : (keyword as string) || "";
-    var pages = Number(
-      Array.isArray(page) ? page[0] || "" : (page as string) || ""
-    );
+    const keywords = searchParams?.get("keyword") || "";
+    const pages = Number(searchParams?.get("page") || "1");
     const getPosts = async () => {
       setIsLoading(true);
       try {
@@ -102,7 +97,7 @@ export const ListSearchPosts = ({
       setResetpagi(false);
     };
     getPosts();
-  }, [router.query]);
+  }, [searchParams]);
   const len = Math.ceil(Number(totalPosts) / 8);
 
   return (
@@ -114,8 +109,9 @@ export const ListSearchPosts = ({
               <GridItem key={index}>
                 <CardBlog
                   date={post?.date ? formatDate(post.date) : ""}
-                  title={post?.title?.rendered}
-                  desc={clean("")}
+                  title={post?.title}
+                  plain_title={post?.plain_title}
+                  desc={post?.excerpt}
                   image={post?.featured_image || ""}
                   path={`/${post?.slug}`}
                 />
@@ -144,7 +140,7 @@ export const ListSearchPosts = ({
             pageRangeDisplayed={1}
             marginPagesDisplayed={1}
             activeClassName="active"
-            forcePage={Number(router.query.page) - 1}
+            forcePage={Number(searchParams?.get("page") || "1") - 1}
           />
         </HStack>
       )}
