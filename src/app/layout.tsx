@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 import Layout from "@/layouts";
 import Providers from "./providers";
 import "@/styles/globals.css";
 import "@/styles/tableContent.css";
-import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "TNUT",
   description: "Tuyển sinh Đại học Kỹ thuật Công nghiệp",
   verification: {
     google: "-vNFb7d_Uegsq9h12mrwkgQkpdtUxhe-Gedud1ERZiA"
+  },
+  other: {
+    "preconnect": "https://www.googletagmanager.com",
+    "dns-prefetch": "https://www.googletagmanager.com"
   }
 };
 
@@ -51,6 +54,17 @@ export default async function RootLayout({
 
   return (
     <html lang="vi">
+      <Script id="gtm-init" strategy="beforeInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+        `}
+      </Script>
+      <Script
+        id="gtm-script"
+        strategy="beforeInteractive"
+        src="https://www.googletagmanager.com/gtm.js?id=GTM-TDCV4KK"
+      />
       <body>
         <noscript>
           <iframe
@@ -61,16 +75,6 @@ export default async function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <Script id="google-tag-manager" strategy="afterInteractive">
-          {`
-            (function(w,d,s,l,i){
-              w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-              var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
-              j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-              f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-TDCV4KK');
-          `}
-        </Script>{" "}
         <Providers>
           <Layout data={globalData}>{children}</Layout>
         </Providers>
